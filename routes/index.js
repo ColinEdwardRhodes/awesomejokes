@@ -12,12 +12,9 @@ router.get('/', function(req, res, next) {
 
     collection.count()
       .then(function (count) { 
-
-        var query = {};
         var random = Math.floor(Math.random() * count);
-        console.log(random);
-        var cursor = collection.find(query).limit(1).skip(random);
-        cursor.toArray(function(err, jokes) {
+        
+        collection.find({}).limit(1).skip(random).toArray(function(err, jokes) {
           res.render('index', { Title: jokes[0].title, Body: jokes[0].body });
         });
 
