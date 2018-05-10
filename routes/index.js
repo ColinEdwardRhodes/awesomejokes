@@ -15,7 +15,10 @@ router.get('/', function(req, res, next) {
         var random = Math.floor(Math.random() * count);
         
         collection.find({}).limit(1).skip(random).toArray(function(err, jokes) {
-          res.render('index', { Title: jokes[0].title, Body: jokes[0].body });
+
+          var body = jokes[0].body.replace("\r\n", "<br/>");
+          console.log(body);
+          res.render('index', { Title: jokes[0].title, Body: body });
         });
 
       });
