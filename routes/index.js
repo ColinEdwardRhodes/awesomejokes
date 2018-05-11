@@ -5,7 +5,7 @@ var router = express.Router();
 router.get('/', function(req, res, next) {
 
   // access pooled connection through req.app.locals
-  const db = req.app.locals.db('jokes');
+  const db = req.app.locals.db.db('jokes');
   var collection = db.collection('jokes');
 
   collection.count()
