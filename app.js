@@ -19,7 +19,6 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
@@ -37,6 +36,16 @@ app.use(function(err, req, res, next) {
   // render the error page
   res.status(err.status || 500);
   res.render('error');
+});
+
+var mongoClient = require("mongodb").MongoClient;
+mongoClient.connect(process.env.MongoDB, function (err, client) {
+
+  if (err) { 
+    res.status(500).send({ error: err });
+  } else {
+    app.locals.db = client;
+  }
 });
 
 module.exports = app;
