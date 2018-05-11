@@ -7,21 +7,25 @@ router.get('/', function(req, res, next) {
   var mongoClient = require("mongodb").MongoClient;
   mongoClient.connect(process.env.MongoDB, function (err, client) {
   
-    const db = client.db('jokes');
-    var collection = db.collection('jokes');
+    if (err) { 
+      res.status(500).send({ error: err });
+    } else {
 
-    collection.count()
-      .then(function (count) { 
-        var random = Math.floor(Math.random() * count);
+      const db = client.db('jokes');
+      var collection = db.collection('jokes');
+
+      collection.count()
+        .then(function (count) { 
+          var random = Math.floor(Math.random() * count);
         
-        collection.find({}).limit(1).skip(random).toArray(function(err, jokes) {
+          collection.find({}).limit(1).skip(random).toArray(function(err, jokes) {
 
-          var body = jokes[0].body.replace("\r\n", "<br/>");
-          console.log(body);
-          res.render('index', { Title: jokes[0].title, Body: body });
+            var body = jokes[0].body.replace("\r\n", "<br/>");
+            console.log(body);
+            res.render('index', { Title: jokes[0].title, Body: body });
+          });
         });
-
-      });
+    }
   });
 });
 
